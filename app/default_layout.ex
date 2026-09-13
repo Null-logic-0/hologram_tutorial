@@ -13,7 +13,7 @@ defmodule HologramTutorial.DefaultLayout do
         <Hologram.UI.Runtime />
       </head>
       <body>
-        <main class="px-4 py-20 sm:px-6 lg:px-8 bg-slate-50 font-sans text-slate-900 antialiased">
+        <main class="px-4 py-20 sm:px-6 lg:px-8 antialiased">
           <div class="mx-auto max-w-2xl space-y-4">
             <slot />
           </div>

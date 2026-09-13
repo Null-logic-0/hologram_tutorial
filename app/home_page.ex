@@ -9,9 +9,9 @@ defmodule HologramTutorial.HomePage do
 
   def template do
     ~HOLO"""
-    <div class="flex items-center justify-center bg-slate-50 px-4">
-      <div class="rounded-2xl bg-white p-8 text-center shadow-lg ring-1 ring-slate-200">
-        <h1 class="text-2xl font-bold text-slate-900">Hello from Hologram!</h1>
+    <div class="flex items-center justify-center px-4">
+      <div class="rounded-2xl bg-base-200 p-8 text-center shadow-lg">
+        <h1 class="text-2xl font-bold">Hello from Hologram!</h1>
 
         <p class="mt-6 text-5xl font-extrabold tabular-nums text-brand">{@count}</p>
         <p class="mt-1 text-sm font-medium uppercase tracking-wide text-slate-400">Count</p>

@@ -11,8 +11,8 @@ defmodule HologramTutorial.TasksPage do
 
   def template do
     ~HOLO"""
-    <div class="rounded-2xl bg-white p-8 shadow-lg ring-1 ring-slate-200">
-      <h1 class="text-2xl font-bold text-slate-900">Todo</h1>
+    <div class="rounded-2xl bg-base-200 p-8 shadow-lg">
+      <h1 class="text-2xl font-bold">Todo</h1>
       <p class="mt-1 text-sm text-slate-400">
         {@done_count} of {@total_count} done
       </p>
@@ -20,7 +20,7 @@ defmodule HologramTutorial.TasksPage do
       <TodoForm cid="todo_form" target="page" />
 
       {%if @tasks == []}
-        <p class="mt-6 text-center text-sm text-slate-400">Nothing here yet.</p>
+        <p class="mt-6 text-center text-sm">Nothing here yet.</p>
       {%else}
         <ul class="mt-6 divide-y divide-slate-100">
           {%for task <- @tasks}
@@ -32,10 +32,13 @@ defmodule HologramTutorial.TasksPage do
     """
   end
 
-  def init(_params, component, _server) do
-    component
-    |> put_state(:tasks, load_tasks())
-    |> recount()
+  def init(_params, component, server) do
+    component =
+      component
+      |> put_state(:tasks, load_tasks())
+      |> recount()
+
+    {component, put_subscription(server, :tasks)}
   end
 
   # Actions (client)
@@ -62,13 +65,13 @@ defmodule HologramTutorial.TasksPage do
 
   def command(:create_task, params, server) do
     Tasks.create_task(%{todo: params.todo})
-    reply_with_tasks(server)
+    broadcast_tasks(server)
   end
 
   def command(:toggle_task, params, server) do
     task = Tasks.get_task!(params.id)
     Tasks.update_task(task, %{completed: !task.completed})
-    reply_with_tasks(server)
+    broadcast_tasks(server)
   end
 
   def command(:delete_task, params, server) do
@@ -76,11 +79,11 @@ defmodule HologramTutorial.TasksPage do
     |> Tasks.get_task!()
     |> Tasks.delete_task()
 
-    reply_with_tasks(server)
+    broadcast_tasks(server)
   end
 
-  defp reply_with_tasks(server) do
-    put_action(server, :tasks_loaded, tasks: load_tasks())
+  defp broadcast_tasks(server) do
+    put_broadcast(server, :tasks, :tasks_loaded, tasks: load_tasks())
   end
 
   defp load_tasks do

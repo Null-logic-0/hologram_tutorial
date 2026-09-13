@@ -15,7 +15,7 @@ defmodule HologramTutorial.Components.TodoForm do
 
   def template do
     ~HOLO"""
-    <form $submit="submit" class="mt-6 flex gap-2">
+    <form $submit="submit" class="mt-6 flex items-center gap-2">
       <input
         type="text"
         name="todo"
@@ -23,7 +23,7 @@ defmodule HologramTutorial.Components.TodoForm do
         autocomplete="off"
         value={@draft}
         $change="update_draft"
-        class="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-slate-900 outline-none focus:border-brand"
+        class="flex-1 input"
       />
       <button type="submit" class="btn btn-primary">Add</button>
     </form>

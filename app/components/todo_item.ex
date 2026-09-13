@@ -24,7 +24,7 @@ defmodule HologramTutorial.Components.TodoItem do
           class="size-4 shrink-0 cursor-pointer accent-brand"
         />
         <Link to={HologramTutorial.TaskPage, id: @task.id}>
-          <span class="{todo_class(@task.completed)} hover:underline hover:text-info transition-all">
+          <span class="{todo_class(@task.completed)} hover:underline  hover:text-info transition-all">
             {@task.todo}
           </span>
         </Link>
@@ -41,6 +41,6 @@ defmodule HologramTutorial.Components.TodoItem do
     """
   end
 
-  defp todo_class(true), do: "flex-1 text-slate-400 line-through"
-  defp todo_class(false), do: "flex-1 text-slate-900"
+  defp todo_class(true), do: "flex-1 line-through text-success"
+  defp todo_class(false), do: "flex-1"
 end

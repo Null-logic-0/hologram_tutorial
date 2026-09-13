@@ -38,6 +38,20 @@ defmodule HologramTutorial.Tasks do
   def get_task!(id), do: Repo.get!(Task, id)
 
   @doc """
+  Gets a single task, or nil if it does not exist.
+
+  ## Examples
+
+      iex> get_task(123)
+      %Task{}
+
+      iex> get_task(456)
+      nil
+
+  """
+  def get_task(id), do: Repo.get(Task, id)
+
+  @doc """
   Creates a task.
 
   ## Examples

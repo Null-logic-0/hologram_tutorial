@@ -8,6 +8,8 @@ The point isn't the app. The point is seeing how a Hologram page, component, act
 
 A counter page and a todo list. You can add, complete and delete todos, and open one on its own page. Todos live in Postgres.
 
+The list is **live**: open it in two tabs and a change in one shows up in the other immediately, no reload and no polling. Open a todo's own page and delete it from somewhere else, and that page tells you it's gone.
+
 | Route | Page | What it shows |
 | --- | --- | --- |
 | `/` | `HologramTutorial.HomePage` | A counter — actions and state, no server involved |
@@ -76,7 +78,9 @@ Notes from actually building this, mostly things that fail quietly rather than l
 
 **Stateless components can still fire events**, they just can't handle them. Dispatch with an explicit target: `$click={action: :delete, target: "page", params: %{id: @task.id}}`. The page's cid is always `"page"`, the layout's is `"layout"`.
 
-**Actions run in the browser, commands run on the server.** Anything touching Ecto goes in a command; the command pushes results back with `put_action/3`.
+**Actions run in the browser, commands run on the server.** Anything touching Ecto goes in a command; the command pushes results back to the client as an action.
+
+**Live updates are a broadcast, not a reply.** A page joins a channel in `init/3` with `put_subscription(server, :tasks)`, and commands finish with `put_broadcast(server, :tasks, :tasks_loaded, tasks: ...)` instead of replying to the caller alone. The tab that made the change receives its own broadcast, so one call updates everybody through the same `action(:tasks_loaded, ...)` handler — there's no separate "update myself" path to keep in sync. Subscriptions are dropped automatically when you navigate away. It rides a Server-Sent Events stream (`GET /hologram/sse`); you don't configure any of it.
 
 ## Handy commands
 
